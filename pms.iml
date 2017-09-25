@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <conelement value="org.grails.ide.eclipse.core.CLASSPATH_CONTAINER" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src/java" expected_position="0" />
+      <src_folder value="file://$MODULE_DIR$/src/groovy" expected_position="1" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/conf" expected_position="2" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/conf/spring" expected_position="3" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/controllers" expected_position="4" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/domain" expected_position="5" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/i18n" expected_position="6" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/services" expected_position="7" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/taglib" expected_position="8" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/utils" expected_position="9" />
+      <src_folder value="file://$MODULE_DIR$/grails-app/views" expected_position="10" />
+      <src_folder value="file://$MODULE_DIR$/test/integration" expected_position="11" />
+      <src_folder value="file://$MODULE_DIR$/test/unit" expected_position="12" />
+    </src_description>
+  </component>
   <component name="FacetManager">
     <facet type="hibernate" name="Hibernate">
       <configuration>
@@ -38,6 +56,7 @@
       <sourceFolder url="file://$MODULE_DIR$/grails-app/taglib" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/jobs" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/work/gspcompile" />
       <excludeFolder url="file://$MODULE_DIR$/target/work/plugin-build-classes" />
@@ -121,6 +140,9 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.55/tomcat-embed-jasper-7.0.55.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/tomcat-catalina-ant/7.0.55/tomcat-catalina-ant-7.0.55.jar!/" />
           <root url="file://$MODULE_DIR$/lib" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/quartz-scheduler/quartz/2.2.1/quartz-2.2.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/19.0/guava-19.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/grails/grails-datastore-rest-client/3.1.4.RELEASE/grails-datastore-rest-client-3.1.4.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
