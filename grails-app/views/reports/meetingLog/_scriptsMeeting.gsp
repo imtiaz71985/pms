@@ -117,15 +117,15 @@
                     template: "#=formatDate(MEETING_TYPE,SERVICE_ID,JUNE)#"
                 },
                 {field: "JULY", title: "July", width: 130, sortable: false, filterable: false,
-                    attributes: {style: setAlignCenter()}, headerAttributes: {style: setAlignCenter()},
+                     headerAttributes: {style: setAlignCenter()},
                     template: "#=formatDate(MEETING_TYPE,SERVICE_ID,JULY)#"
                 },
                 {field: "AUGUST", title: "August", width: 130, sortable: false, filterable: false,
-                    attributes: {style: setAlignCenter()}, headerAttributes: {style: setAlignCenter()},
+                     headerAttributes: {style: setAlignCenter()},
                     template: "#=formatDate(MEETING_TYPE,SERVICE_ID,AUGUST)#"
                 },
                 {field: "SEPTEMBER", title: "September", width: 130, sortable: false, filterable: false,
-                    attributes: {style: setAlignCenter()}, headerAttributes: {style: setAlignCenter()},
+                    headerAttributes: {style: setAlignCenter()},
                     template: "#=formatDate(MEETING_TYPE,SERVICE_ID,SEPTEMBER)#"
                 },
                 {field: "OCTOBER", title: "October", width: 130, sortable: false, filterable: false,
@@ -159,14 +159,14 @@
             for (a in temp) {
                 if(temp[a]!= ''){
                     temp2 = temp[a].split("&");
-                    result += '<span style="cursor:pointer;"> Held On:'+ temp2[1]+ '</span><br/>Uploaded:'+temp2[2]+'<br/>';
+                    result += '<span style="cursor:pointer;"> Held On&nbsp;&nbsp;&nbsp;:'+ temp2[1]+ '</span><br/>Uploaded:'+temp2[2]+'<br/>';
                 }
             }
         }else{
             for (a in temp) {
                 if(temp[a]!= ''){
                     temp2 = temp[a].split("&");
-                    result += '<a><span style="cursor:pointer;" onclick="loadPage(' + temp2[0] + ',' + ${meetingTypeId} +');">' + temp2[1] + '</span></a><br/>Uploaded:'+temp2[2]+'<br/>';
+                    result += 'Held On&nbsp;&nbsp;&nbsp;:<a><span style="cursor:pointer;" onclick="loadPage(' + temp2[0] + ',' + ${meetingTypeId} +');">' + temp2[1] + '</span></a><br/>Uploaded:'+temp2[2]+'<br/>';
                 }
             }
         }

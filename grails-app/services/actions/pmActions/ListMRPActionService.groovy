@@ -128,7 +128,7 @@ class ListMRPActionService extends BaseService implements ActionServiceIntf {
 
                 FROM pm_actions a
                 LEFT JOIN pm_goals g ON g.id = a.goal_id
-                JOIN (SELECT * FROM pm_service_sector WHERE id = 9) sc ON sc.id = a.service_id
+                JOIN (SELECT * FROM pm_service_sector WHERE id = ${serviceId}) sc ON sc.id = a.service_id
                 LEFT JOIN pm_actions_extend_history aeh ON aeh.actions_id=a.id
                 WHERE a.service_id = ${serviceId}
                 AND ('${start}' <=  a.end AND '${end}' >= a.start)  GROUP BY a.id
