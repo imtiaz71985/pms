@@ -737,7 +737,7 @@ class PmActionsService extends BaseService {
                 WHERE (MONTHNAME(a.end)='${monthName}' AND i.closing_month IS NULL AND i.target>(SELECT SUM(achievement) FROM pm_actions_indicator_details
                 WHERE actions_id=a.id AND indicator_id=i.id))
                 UNION
-                SELECT COUNT(*)id FROM pm_mcrs_log ml WHERE  ml.service_id=${serviceId} AND ml.year=${year} AND ml.month<${month} AND is_submitted<>TRUE
+                SELECT id FROM pm_mcrs_log ml WHERE  ml.service_id=${serviceId} AND ml.year=${year} AND ml.month<${month} AND is_submitted<>TRUE
                 )tbl
         """
         List<GroovyRowResult> lst = executeSelectSql(queryForList)
@@ -753,11 +753,11 @@ class PmActionsService extends BaseService {
             SELECT COUNT(*) c FROM(
               SELECT ed.id FROM ed_dashboard ed
               WHERE ed.service_id = ${serviceId} AND COALESCE(ed.is_resolve,FALSE) <> 1 AND COALESCE(ed.is_followup,FALSE)<>1
-              AND MONTH(month_for) <= ${month} AND YEAR(month_for)=${year} AND ed.month_for NOT IN (SELECT followup_month_for FROM ed_dashboard
+              AND MONTH(month_for) < ${month} AND YEAR(month_for)=${year} AND ed.month_for NOT IN (SELECT followup_month_for FROM ed_dashboard
               WHERE DATE(followup_month_for)=DATE(ed.month_for) AND service_id=ed.service_id AND issue_id=ed.issue_id
               AND MONTH(month_for) > ${month} AND YEAR(month_for)=${year})
             UNION
-                SELECT COUNT(*)id FROM pm_mcrs_log ml WHERE  ml.service_id=9 AND ml.year=2017 AND ml.month<8 AND is_submitted_db<>TRUE
+                SELECT id FROM pm_mcrs_log ml WHERE  ml.service_id=${serviceId} AND ml.year=${year} AND ml.month<${month} AND is_submitted_db<>TRUE
                 )tbl
         """
         List<GroovyRowResult> lst = executeSelectSql(queryForList)
