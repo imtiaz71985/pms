@@ -755,7 +755,7 @@ class PmActionsService extends BaseService {
               WHERE ed.service_id = ${serviceId} AND COALESCE(ed.is_resolve,FALSE) <> 1 AND COALESCE(ed.is_followup,FALSE)<>1
               AND MONTH(month_for) < ${month} AND YEAR(month_for)=${year} AND ed.month_for NOT IN (SELECT followup_month_for FROM ed_dashboard
               WHERE DATE(followup_month_for)=DATE(ed.month_for) AND service_id=ed.service_id AND issue_id=ed.issue_id
-              AND MONTH(month_for) > ${month} AND YEAR(month_for)=${year})
+              AND MONTH(month_for) >= ${month} AND YEAR(month_for)=${year})
             UNION
                 SELECT id FROM pm_mcrs_log ml WHERE  ml.service_id=${serviceId} AND ml.year=${year} AND ml.month<${month} AND is_submitted_db<>TRUE
                 )tbl
