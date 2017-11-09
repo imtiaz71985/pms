@@ -129,6 +129,7 @@
         clearForm($("#goalForm"), $('#serviceId'));
         initObservable();
         dropDownService.value(serviceId);
+        $('#year').val(calYear);
         $('#create').html("<span class='k-icon k-i-plus'></span>Save");
     }
     function resetForm() {
