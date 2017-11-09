@@ -55,7 +55,8 @@ class PmGoalsController  extends BaseController {
 
     def lstGoalsByServiceId(){
         long serviceId = Long.parseLong(params.serviceId.toString())
-        List<GroovyRowResult> lst = pmGoalsService.lstGoalsForDropDown(serviceId)
+        int year = Integer.parseInt(params.year.toString())
+        List<GroovyRowResult> lst = pmGoalsService.lstGoalsForDropDown(serviceId, year)
         List lstValue = baseService.listForKendoDropdown(lst, null, null)
         Map result = [lstGoals: lstValue]
         render result as JSON

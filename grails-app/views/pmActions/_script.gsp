@@ -37,6 +37,7 @@
     function initialLoadGrid() {
         var url = "${createLink(controller: 'pmActions', action: 'list')}?year=" + calYear;
         populateGridKendo(gridActions, url);
+        populateGoals();
         jQuery.ajax({
             type: 'post',
             url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear,
@@ -60,6 +61,35 @@
             dataType: 'json'
         });
 
+    }
+
+    // To populate Goals List
+    function populateGoals() {
+        if (serviceId == '') {
+            dropDownGoals.setDataSource(getKendoEmptyDataSource(dropDownGoals, null));
+            dropDownGoals.value('');
+            return false;
+        }
+        showLoadingSpinner(true);
+        $.ajax({
+            url: "${createLink(controller: 'pmGoals', action: 'lstGoalsByServiceId')}?serviceId=" + serviceId + "&year="+calYear,
+            success: function (data) {
+                if (data.isError) {
+                    showError(data.message);
+                    return false;
+                }
+                dropDownGoals.setDataSource(data.lstGoals);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                afterAjaxError(XMLHttpRequest, textStatus);
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+                showLoadingSpinner(false);
+            },
+            dataType: 'json',
+            type: 'post'
+        });
+        return true;
     }
 
     function onLoadActionPage() {
@@ -126,6 +156,15 @@
                 }
             }
         }
+
+        $("#goalId").kendoDropDownList({
+            dataTextField: "name",
+            dataValueField: "id",
+            filter: "contains",
+            dataSource: getBlankDataSource,
+            value: []
+        });
+        dropDownGoals = $("#goalId").data("kendoDropDownList");
 
         $("#supportDepartment").kendoMultiSelect({
             dataTextField: "name",

@@ -35,13 +35,18 @@
                         <label class="col-md-1 control-label label-required" for="goalId">Goals:</label>
 
                         <div class="col-md-10">
-                            <app:dropDownGoals
+%{--                            <app:dropDownGoals
                                     class="kendo-drop-down"
                                     id="goalId" name="goalId"
                                     placeholder="Select Goal" tabindex="1"
                                     data-bind="value: actions.goalId"
                                     data_model_name="dropDownGoals">
-                            </app:dropDownGoals>
+                            </app:dropDownGoals>--}%
+
+                            <select id="goalId" name="goalId" class="kendo-drop-down"
+                                    data-placeholder="Select Goal" tabindex="1"
+                                    data-bind="value: actions.goalId">
+                            </select>
                         </div>
                     </div>
 
