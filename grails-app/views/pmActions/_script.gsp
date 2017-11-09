@@ -338,6 +338,12 @@
     }
 
     function addService() {
+        var st = new Date(moment(calYear).startOf('year'));
+        var ed = new Date(moment(calYear).endOf('year'));
+        $('#start').data("kendoDatePicker").min(st);
+        $('#start').data("kendoDatePicker").max(ed);
+        $('#end').data("kendoDatePicker").min(st);
+        $('#end').data("kendoDatePicker").max(ed);
         $("#rowAction").show();
         dropDownService.value(serviceId);
     }
