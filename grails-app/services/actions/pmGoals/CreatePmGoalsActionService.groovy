@@ -24,11 +24,12 @@ class CreatePmGoalsActionService extends BaseService implements ActionServiceInt
                 return super.setError(params, INVALID_INPUT_MSG)
             }
             long serviceId = Long.parseLong(params.serviceId.toString())
+            int year = Integer.parseInt(params.year.toString())
             int count = PmGoals.countByServiceIdAndSequence(serviceId,params.sequence)
             if (count > 0) {
                 return super.setError(params, ALREADY_EXIST)
             }
-            PmGoals goals = buildObject(params,serviceId)
+            PmGoals goals = buildObject(params,serviceId,year)
             params.put(GOAL_OBJECT, goals)
             return params
         } catch (Exception ex) {
@@ -76,9 +77,9 @@ class CreatePmGoalsActionService extends BaseService implements ActionServiceInt
         return result
     }
 
-    private static PmGoals buildObject(Map parameterMap,long serviceId) {
+    private static PmGoals buildObject(Map parameterMap,long serviceId, int year) {
         SpTimeSchedule schedule = SpTimeSchedule.findByIsActive(Boolean.TRUE)
-        List<PmGoals> max = PmGoals.executeQuery("SELECT COALESCE(MAX(sequence),0) FROM PmGoals WHERE serviceId=${serviceId}")
+        List<PmGoals> max = PmGoals.executeQuery("SELECT COALESCE(MAX(sequence),0) FROM PmGoals WHERE serviceId=${serviceId} AND year = ${year}")
         PmGoals goals = new PmGoals(parameterMap)
         goals.serviceId = serviceId
         goals.sequence = max[0]+1

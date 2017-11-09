@@ -6,7 +6,7 @@ class ListPmGoalsActionServiceModel {
     public static final String SQL_LIST_GOALS_MODEL = """
         CREATE OR REPLACE VIEW list_pm_goals_action_service_model AS
         SELECT m.id, m.version, m.goal, sc.short_name AS ser_short_name, sc.id AS service_id,
-         sc.name AS service,m.sequence
+         sc.name AS service,m.sequence,m.year, m.sp_year_id
         FROM pm_goals m
         LEFT JOIN pm_service_sector sc ON sc.id = m.service_id
         ORDER BY sc.sequence,m.sequence ASC;
@@ -18,6 +18,8 @@ class ListPmGoalsActionServiceModel {
     String service
     String serShortName
     String goal
+    int year
+    int spYearId
     int sequence
 
     static constraints = {

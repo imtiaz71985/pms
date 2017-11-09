@@ -18,19 +18,24 @@ class ListPmGoalsActionService extends BaseService implements ActionServiceIntf 
     @Transactional(readOnly = true)
     public Map execute(Map result) {
         try {
-            try{
-                long serviceId = Long.parseLong(result.serviceId.toString())
+            List<Long> lst = currentUserDepartmentList()
+            boolean departmentalUser = isUserOnlyDepartmental()
+            int year = Integer.parseInt(result.year.toString())
+
+            if(departmentalUser){
                 Closure additionalParam = {
-                    'eq'('serviceId', serviceId)
+                    'in'('serviceId', lst)
+                    'eq'('year', year)
                 }
                 Map resultMap = super.getSearchResult(result, ListPmGoalsActionServiceModel.class,additionalParam)
                 result.put(LIST, resultMap.list)
                 result.put(COUNT, resultMap.count)
                 return result
-            } catch (Exception ex) {}
-            List<Long> lst = currentUserDepartmentList()
+            }
+
             Closure additionalParam = {
                 'in'('serviceId', lst)
+                'eq'('year', year)
             }
             Map resultMap = super.getSearchResult(result, ListPmGoalsActionServiceModel.class,additionalParam)
             result.put(LIST, resultMap.list)

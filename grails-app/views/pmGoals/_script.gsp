@@ -1,32 +1,64 @@
 <script type="text/x-kendo-template" id="gridToolbar">
 <ul id="menuGrid" class="kendoGridMenu">
     <sec:access url="/pmGoals/create">
-        <li onclick="addService();"><i class="fa fa-plus-square"></i>Add</li>
+        <li onclick="addService();" id="actionCreate"><i class="fa fa-plus-square"></i>Add</li>
     </sec:access>
     <sec:access url="/pmGoals/update">
-        <li onclick="editService();"><i class="fa fa-edit"></i>Edit</li>
+        <li onclick="editService();" id="actionUpdate"><i class="fa fa-edit"></i>Edit</li>
     </sec:access>
     <sec:access url="/pmGoals/delete">
-        <li onclick="deleteService();"><i class="fa fa-trash-o"></i>Delete</li>
+        <li onclick="deleteService();" id="actionDelete"><i class="fa fa-trash-o"></i>Delete</li>
     </sec:access>
+    <li class="pull-right" onclick="showCalender();">
+        <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
+    </li>
 </ul>
 </script>
 
 <script language="javascript">
-    var gridGoal, dataSource, goalModel,dropDownService, serviceId, isSubmit;
+    var gridGoal, dataSource, goalModel,dropDownService, serviceId, isSubmit,calYear;
 
     $(document).ready(function () {
         onLoadGoalPage();
+        calYear = moment().format('YYYY');
         initGoalGrid();
         initObservable();
+        initialLoadGrid();
+        $("#calYear").text(calYear);
     });
 
     function onLoadGoalPage() {
         $("#rowGoals").hide();
         serviceId = ${serviceId};
+        $('#year').kendoDatePicker({
+            format: "yyyy",
+            parseFormats: ["yyyy"],
+            start: "decade",
+            depth: "decade"
+        }).data("kendoDatePicker");
+
         initializeForm($("#goalForm"), onSubmitGoal);
         defaultPageTile("Create Goal",null);
         isSubmit=${isSubmitted};
+    }
+    function showCalender() {
+        $("#myCalModal").modal('show');
+        $('#modalCalYear').kendoDatePicker({
+            format: "yyyy",
+            parseFormats: ["yyyy"],
+            start: "decade",
+            depth: "decade"
+        }).data("kendoDatePicker");
+        $('#modalCalYear').val(calYear);
+    }
+
+    function onClickCalModal() {
+        calYear = $('#modalCalYear').val();
+        $("#calYear").text(calYear);
+        $('#modalCalYear').val('');
+        initialLoadGrid();
+        $("#myCalModal").modal('hide');
+
     }
 
     function executePreCondition() {
@@ -104,12 +136,37 @@
         dropDownService.value(serviceId);
         $('#rowGoals').hide();
     }
+    function initialLoadGrid() {
+        var url = "${createLink(controller: 'pmGoals', action: 'list')}?year=" + calYear;
+        populateGridKendo(gridGoal, url);
+        $.ajax({
+            type: 'post',
+            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear,
+            success: function (data, textStatus) {
+                if (data) {
+                    $("#actionCreate").hide();
+                    $("#actionUpdate").hide();
+                    $("#actionDelete").hide();
+                } else {
+                    $("#actionCreate").show();
+                    $("#actionUpdate").show();
+                    $("#actionDelete").show();
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+                showLoadingSpinner(false);
+            },
+            dataType: 'json'
+        });
 
+    }
     function initDataSource() {
         dataSource = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "${createLink(controller: 'pmGoals', action: 'list')}",
+                    url: false,
                     dataType: "json",
                     type: "post"
                 }
@@ -122,6 +179,7 @@
                         id: { type: "number" },
                         version: { type: "number" },
                         goal: { type: "string" },
+                        year: { type: "number" },
                         serviceId: { type: "number" },
                         service: { type: "string" },
                         serShortName: { type: "string" },
@@ -145,6 +203,7 @@
         initDataSource();
         $("#gridGoal").kendoGrid({
             dataSource: dataSource,
+            autoBind: false,
             height: getGridHeightKendo(),
             selectable: true,
             sortable: true,
@@ -165,12 +224,16 @@
                 {field: "sequence", title: "ID#", width: 20, sortable: false, filterable: false,
                     attributes: {style: setAlignCenter()},headerAttributes: {style: setAlignCenter()}
                 },
-                {field: "goal", title: "Goal Statement", width: 200, sortable: false, filterable: false}
+                {field: "goal", title: "Goal Statement", width: 200, sortable: false, filterable: false},
+                {
+                    field: "year", title: "Year", width: 30, sortable: false, filterable: false,
+                    attributes: {style: setAlignCenter()}, headerAttributes: {style: setAlignCenter()}
+                }
             ],
             filterable: {
                 mode: "row"
             },
-            toolbar: isSubmit!=true?kendo.template($("#gridToolbar").html()):''
+            toolbar: kendo.template($("#gridToolbar").html())
         });
         gridGoal = $("#gridGoal").data("kendoGrid");
         $("#menuGrid").kendoMenu();
@@ -200,6 +263,7 @@
     }
     function addService(){
         $("#rowGoals").show();
+        $('#year').val(calYear);
         dropDownService.value(serviceId);
     }
     function editService() {
@@ -213,6 +277,7 @@
 
     function showService(goal) {
         goalModel.set('goal', goal);
+        $('#year').val(goal.year);
         $('#create').html("<span class='k-icon k-i-plus'></span>Update");
     }
 

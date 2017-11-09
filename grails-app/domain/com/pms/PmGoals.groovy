@@ -7,10 +7,11 @@ class PmGoals {
     long serviceId
     String goal
     int sequence
+    int year
     Long spYearId
 
     static mapping = {
-        goal     sqlType: 'text'
+        goal sqlType: 'text'
     }
 
     static constraints = {

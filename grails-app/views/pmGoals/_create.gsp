@@ -26,24 +26,23 @@
                             </app:dropDownService>
                         </div>
 
-                        <div class="col-md-3 pull-left">
-                            <span class="k-invalid-msg" data-for="serviceId"></span>
+                        <label class="col-md-1 control-label label-optional" for="year">Year:</label>
+
+                        <div class="col-md-4">
+                            <input type="text" id="year" name="year" tabindex="2"
+                                   placeholder="Select Year" readonly>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-1 control-label label-required" for="goal">Goals:</label>
 
-                        <div class="col-md-6">
-                            <textarea id="goal" name="goal" cols="4" rows="5"
+                        <div class="col-md-9">
+                            <textarea id="goal" name="goal" cols="4" rows="3"
                                       tabindex="3" class="form-control"
                                       data-bind="value: goal.goal"
                                       required validationMessage="Required"
                                       placeholder="Project Goal" class="kendo-drop-down"></textarea>
-                        </div>
-
-                        <div class="col-md-3 pull-left">
-                            <span class="k-invalid-msg" data-for="goal"></span>
                         </div>
                     </div>
                 </div>
