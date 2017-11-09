@@ -37,17 +37,29 @@
     function initialLoadGrid() {
         var url = "${createLink(controller: 'pmActions', action: 'list')}?year=" + calYear;
         populateGridKendo(gridActions, url);
-        isSubmit = ${isSubmitted};
-        serviceId = ${serviceId};
-        if (isSubmit) {
-            $("#actionCreate").hide();
-            $("#actionUpdate").hide();
-            $("#actionDelete").hide();
-        } else {
-            $("#actionCreate").show();
-            $("#actionUpdate").show();
-            $("#actionDelete").show();
-        }
+        jQuery.ajax({
+            type: 'post',
+            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear,
+            success: function (data, textStatus) {
+                serviceId = ${serviceId};
+                if (data) {
+                    $("#actionCreate").hide();
+                    $("#actionUpdate").hide();
+                    $("#actionDelete").hide();
+                } else {
+                    $("#actionCreate").show();
+                    $("#actionUpdate").show();
+                    $("#actionDelete").show();
+                }
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+            },
+            dataType: 'json'
+        });
+
     }
 
     function onLoadActionPage() {
@@ -162,6 +174,7 @@
         $('#modalCalYear').val('');
         initialLoadGrid();
         $("#myCalModal").modal('hide');
+
     }
     function makeKendoDropDownList(name) {
         var modalName = "#" + name;
