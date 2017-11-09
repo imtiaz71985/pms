@@ -28,13 +28,10 @@ class PmSpLogController extends BaseController {
     }
     def retrieveSapIsSubmitted() {
         SecUser user = baseService.currentUserObject()
-        boolean isAdmin = baseService.isUserSystemAdmin(user.id)
-        if(isAdmin) {
-            render Boolean.FALSE
-            return
-        }
+        boolean isSubmitted = Boolean.FALSE
         PmSpLog spLog = PmSpLog.findByServiceIdAndYear(user.serviceId, Integer.parseInt(params.year.toString()))
-        render spLog.isSubmitted
+        if(spLog) isSubmitted = spLog.isSubmitted
+        render isSubmitted
     }
     def list() {
         renderOutput(listPmSpLogActionService, params)
