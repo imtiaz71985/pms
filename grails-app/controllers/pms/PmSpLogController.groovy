@@ -26,7 +26,7 @@ class PmSpLogController extends BaseController {
         renderOutput(updatePmSpLogActionService, params)
 
     }
-    def retrieveSpLog() {
+    def retrieveSapIsSubmitted() {
         SecUser user = baseService.currentUserObject()
         boolean isAdmin = baseService.isUserSystemAdmin(user.id)
         if(isAdmin) {
