@@ -135,6 +135,7 @@
     function resetForm() {
         initObservable();
         dropDownService.value(serviceId);
+        $('#year').val(calYear);
         $('#rowGoals').hide();
     }
     function initialLoadGrid() {
