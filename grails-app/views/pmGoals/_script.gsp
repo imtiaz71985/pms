@@ -12,12 +12,11 @@
     <div class="pull-right">
         <table>
             <tr><td>
-                <input type="text" id="serviceIdGrid" name="serviceIdGrid" class="col-md-2 kendo-drop-down"
-                       onchange="onChangeService()"/>
+                <select id="serviceIdGrid" class="kendo-drop-down"
+                        data-placeholder="Select Service"  onchange="onChangeService()">
+                </select>
             </td><td>
-                <li class="pull-right" onclick="showCalender();">
-                    <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
-                </li>
+                <input type="text" id="calYear" name="calYear">
             </td></tr>
         </table>
     </div>
@@ -35,6 +34,14 @@
         dropDownServiceIdGrid = initKendoDropdown($('#serviceIdGrid'), null, null, ${dropDownVals});
         $("#calYear").text(calYear);
         dropDownServiceIdGrid.value(serviceId);
+        $('#calYear').kendoDatePicker({
+            format: "yyyy",
+            parseFormats: ["yyyy"],
+            start: "decade",
+            depth: "decade",
+            change: onChangeService
+        }).data("kendoDatePicker");
+        $('#calYear').val(calYear);
         initialLoadGrid();
 
     });
@@ -42,13 +49,7 @@
     function onLoadGoalPage() {
         $("#rowGoals").hide();
         serviceId = ${serviceId};
-        $('#yearCal').kendoDatePicker({
-            format: "yyyy",
-            start: "decade",
-            depth: "decade",
-            change: initialLoadGrid
-        }).data("kendoDatePicker");
-        $('#yearCal').val(calYear);
+
 
         $('#year').kendoDatePicker({
             format: "yyyy",
@@ -60,25 +61,6 @@
         initializeForm($("#goalForm"), onSubmitGoal);
         defaultPageTile("Create Goal", null);
         isSubmit =${isSubmitted};
-    }
-    function showCalender() {
-        $("#myCalModal").modal('show');
-        $('#modalCalYear').kendoDatePicker({
-            format: "yyyy",
-            parseFormats: ["yyyy"],
-            start: "decade",
-            depth: "decade"
-        }).data("kendoDatePicker");
-        $('#modalCalYear').val(calYear);
-    }
-
-    function onClickCalModal() {
-        calYear = $('#modalCalYear').val();
-        $("#calYear").text(calYear);
-        $('#modalCalYear').val('');
-        initialLoadGrid();
-        $("#myCalModal").modal('hide');
-
     }
 
     function executePreCondition() {
@@ -310,6 +292,7 @@
     }
     function onChangeService() {
         serviceId = dropDownServiceIdGrid.value();
+        calYear = $('#calYear').val();
         initialLoadGrid();
     }
 

@@ -1,22 +1,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="panel panel-primary">
-            <g:form class="form-horizontal form-widgets" role="form">
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label class="col-md-1 control-label label-required" style="text-align: right;"
-                               for="year">Year:</label>
 
-                        <div class="col-md-2">
-                            <input type="text" id="year" name="year">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-footer">
                     <div id="gridMCRSSubmission"></div>
-                </div>
-            </g:form>
+
         </div>
     </div>
 </div>
@@ -35,6 +22,13 @@
     <sec:access url="/pmMcrsLog/submissionDashBoard">
         <li onclick="dashboardSubmission();"><i class="fa fa-gavel"></i>Submit ED's Dashboard</li>
     </sec:access>
+    <div class="pull-right">
+        <table>
+            <tr><td>
+                <input type="text" id="year" name="year">
+            </td></tr>
+        </table>
+    </div>
 </ul>
 </script>
 <script language="javascript">
@@ -43,6 +37,7 @@
     $(document).ready(function () {
         serviceId = ${serviceId};
         currentYear = moment().format('YYYY');
+        initMcrsLogGrid();
         $('#year').kendoDatePicker({
             format: "yyyy",
             parseFormats: ["yyyy"],
@@ -51,7 +46,6 @@
             change: populateGrid
         });
         $('#year').val(currentYear);
-        initMcrsLogGrid();
         populateGrid();
     });
     function populateGrid() {

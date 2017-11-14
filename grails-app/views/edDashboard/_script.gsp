@@ -58,12 +58,14 @@
             data: {serviceId: serviceId},
             url: actionUrl,
             success: function (data, textStatus) {
-                subDate=data.subDate;
-                if( subDate.isEmpty())
-                {subDate =new Date();}
+                subDate = data.subDate;
+                if (subDate.isEmpty()) {
+                    subDate = new Date();
+                }
                 $('#hfSubmissionDate').val(subDate);
                 monthKendo.min(moment(subDate).format('YYYY-MM-DD'));
                 monthKendo.value(moment(subDate).format('MMMM YYYY'));
+                loadData();
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.info('error');

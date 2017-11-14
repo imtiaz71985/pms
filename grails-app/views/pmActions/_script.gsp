@@ -12,12 +12,11 @@
     <div class="pull-right">
         <table>
             <tr><td>
-                <input type="text" id="serviceIdGrid" name="serviceIdGrid" class="col-md-2 kendo-drop-down"
-                       onchange="onChangeService()"/>
+                <select id="serviceIdGrid" class="kendo-drop-down"
+                        data-placeholder="Select Service"  onchange="onChangeService()">
+                </select>
             </td><td>
-                <li class="pull-right" onclick="showCalender();">
-                    <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
-                </li>
+                <input type="text" id="calYear" name="calYear">
             </td></tr>
         </table>
     </div>
@@ -39,7 +38,14 @@
         initActionsGrid();
         initObservable();
         dropDownServiceIdGrid = initKendoDropdown($('#serviceIdGrid'), null, null, ${dropDownVals});
-        $("#calYear").text(calYear);
+        $('#calYear').kendoDatePicker({
+            format: "yyyy",
+            parseFormats: ["yyyy"],
+            start: "decade",
+            depth: "decade",
+            change: onChangeService
+        }).data("kendoDatePicker");
+        $("#calYear").val(calYear);
         dropDownServiceIdGrid.value(serviceId);
         $(document).on("input", ".amount", calculateTarget);
         initialLoadGrid();
@@ -49,29 +55,6 @@
         var url = "${createLink(controller: 'pmActions', action: 'list')}?year=" + calYear+"&serviceId="+serviceId;
         populateGridKendo(gridActions, url);
         populateGoals();
-        /*jQuery.ajax({
-            type: 'post',
-            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear+"&serviceId="+serviceId,
-            success: function (data, textStatus) {
-                serviceId = ${serviceId};
-                if (data) {
-                    $("#actionCreate").hide();
-                    $("#actionUpdate").hide();
-                    $("#actionDelete").hide();
-                } else {
-                    $("#actionCreate").show();
-                    $("#actionUpdate").show();
-                    $("#actionDelete").show();
-                }
-
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-            },
-            complete: function (XMLHttpRequest, textStatus) {
-            },
-            dataType: 'json'
-        });*/
-
     }
 
     // To populate Goals List
@@ -207,24 +190,6 @@
 
         initializeForm($("#actionForm"), onSubmitAction);
         defaultPageTile("Create Actions", null);
-    }
-    function showCalender() {
-        $("#myCalModal").modal('show');
-        $('#modalCalYear').kendoDatePicker({
-            format: "yyyy",
-            parseFormats: ["yyyy"],
-            start: "decade",
-            depth: "decade"
-        }).data("kendoDatePicker");
-        $('#modalCalYear').val(calYear);
-    }
-    function onClickCalModal() {
-        calYear = $('#modalCalYear').val();
-        $("#calYear").text(moment(calYear).format('YYYY'));
-        $('#modalCalYear').val('');
-        initialLoadGrid();
-        $("#myCalModal").modal('hide');
-
     }
     function makeKendoDropDownList(name) {
         var modalName = "#" + name;
@@ -1079,6 +1044,7 @@
     //////////////////////////// END GRID INIT ////////////////////////////////////////////////////////
     function onChangeService() {
         serviceId = dropDownServiceIdGrid.value();
+        calYear = $('#calYear').val();
         initialLoadGrid();
     }
 </script>
