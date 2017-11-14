@@ -1,12 +1,31 @@
-<div id="application_top_panel" class="panel panel-primary">
-    <div class="panel-body">
-            <div id="gridMCRSSubmission"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-primary">
+            <g:form class="form-horizontal form-widgets" role="form">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-md-1 control-label label-required" style="text-align: right;"
+                               for="year">Year:</label>
+
+                        <div class="col-md-2">
+                            <input type="text" id="year" name="year">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div id="gridMCRSSubmission"></div>
+                </div>
+            </g:form>
+        </div>
     </div>
 </div>
+
+
 <style type="text/css">
-    .panel-body {
-        padding: 0px;
-    }
+.panel-body {
+    padding: 0px;
+}
 </style>
 <script type="text/x-kendo-template" id="gridToolbar">
 <ul id="menuGrid2" class="kendoGridMenu">
@@ -19,18 +38,36 @@
 </ul>
 </script>
 <script language="javascript">
-    var gridMCRSSubmission, dataSource2, serviceId;
+    var gridMCRSSubmission, dataSource2, serviceId, kendoDatePicker, currentYear;
 
     $(document).ready(function () {
         serviceId = ${serviceId};
+        currentYear = moment().format('YYYY');
+        $('#year').kendoDatePicker({
+            format: "yyyy",
+            parseFormats: ["yyyy"],
+            depth: "decade",
+            start: "decade",
+            change: populateGrid
+        });
+        $('#year').val(currentYear);
         initMcrsLogGrid();
+        populateGrid();
     });
-
+    function populateGrid() {
+        if (currentYear == '') {
+            showError("Please select year");
+            return false;
+        }
+        currentYear = $('#year').val();
+        var url = "${createLink(controller: 'pmMcrsLog', action: 'list')}?serviceId=" + serviceId + "&year=" + currentYear;
+        populateGridKendo(gridMCRSSubmission, url);
+    }
     function initDataSource() {
         dataSource2 = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "${createLink(controller: 'pmMcrsLog', action: 'list')}?serviceId="+ serviceId,
+                    url: false,
                     dataType: "json",
                     type: "post"
                 }
@@ -79,6 +116,7 @@
             sortable: true,
             resizable: true,
             reorderable: true,
+            autoBind:false,
             pageable: {
                 refresh: true,
                 pageSizes: getDefaultPageSizes(),
@@ -89,7 +127,7 @@
                     field: "monthStr", title: "Month", width: 30, sortable: false, filterable: false
                 },
                 {
-                    title: "Submission Date", headerAttributes: {style: setAlignCenter()},filterable: false,
+                    title: "Submission Date", headerAttributes: {style: setAlignCenter()}, filterable: false,
                     columns: [
                         {
                             field: "submissionDate", title: "MRP",
@@ -122,7 +160,7 @@
             return;
         }
         var isSubmitted = getSelectedValueFromGridKendo(gridMCRSSubmission, 'isSubmitted');
-        if(isSubmitted){
+        if (isSubmitted) {
             showInfo('MRP already submitted');
             return false;
         }
@@ -135,12 +173,12 @@
             return;
         }
         var isSubmitted = getSelectedValueFromGridKendo(gridMCRSSubmission, 'isSubmittedDb');
-        if(isSubmitted){
+        if (isSubmitted) {
             showInfo('Dashboard already submitted');
             return false;
         }
         var msg = 'Are you sure you have no issue reporting to ED and want to submit the ED Dashboard?';
-        if(getSelectedValueFromGridKendo(gridMCRSSubmission, 'issueCount')>0)
+        if (getSelectedValueFromGridKendo(gridMCRSSubmission, 'issueCount') > 0)
             msg = 'Are you sure you want to submit the ED Dashboard?';
         var url = "${createLink(controller: 'pmMcrsLog', action:  'submissionDashBoard')}";
         confirmActionForEdit(msg, url, gridMCRSSubmission);

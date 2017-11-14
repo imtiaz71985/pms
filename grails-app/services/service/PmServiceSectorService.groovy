@@ -25,4 +25,21 @@ class PmServiceSectorService extends BaseService{
         lst = listForKendoDropdown(lst, null, null)
         return lst
     }
+    public List<GroovyRowResult> listServices(boolean isInSP,boolean considerAll) {
+        String spStr = EMPTY_SPACE
+        String considerStr = EMPTY_SPACE
+        String param = currentUserDepartmentListStr()
+        if(isInSP) spStr = " AND is_in_sp IN (${isInSP}) "
+        if(!considerAll) considerStr = " AND id IN (${param}) "
+        String queryForList = """
+            SELECT id, CONCAT(name,' (',short_name,')') AS name
+                FROM mis.service
+            WHERE is_displayble = TRUE
+            ${considerStr} ${spStr}
+            ORDER BY name ASC
+        """
+        List<GroovyRowResult> lstServices = groovySql_mis.rows(queryForList)
+        lstServices = listForKendoDropdown(lstServices, null, null)
+        return lstServices
+    }
 }

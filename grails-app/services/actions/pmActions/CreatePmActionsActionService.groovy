@@ -273,6 +273,7 @@ class CreatePmActionsActionService extends BaseService implements ActionServiceI
         actions.resPerson = resName
         actions.sequence = goals.sequence + "." + con
         actions.tmpSeq = con
+        actions.isEditable=Boolean.TRUE
         return actions
     }
 }

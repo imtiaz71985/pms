@@ -722,31 +722,28 @@ class PmActionsService extends BaseService {
             dec?.delete()
         }
     }
-    public boolean isMRPSubmittable(long serviceId,String monthName,long year,int month) {
+    public String isMRPSubmittable(long serviceId,String monthName,long year,int month) {
         String queryForList = """
-           SELECT COUNT(*)c FROM(
-                SELECT a.id
+                SELECT CAST(a.sequence AS CHAR(50)) AS id
                 FROM pm_actions a
                 LEFT JOIN pm_actions_indicator i ON i.actions_id = a.id AND a.service_id=${serviceId} AND a.year=${year}
                 LEFT JOIN pm_actions_indicator_details idd ON idd.indicator_id = i.id AND idd.month_name = '${monthName}'
                 WHERE  idd.target > 0 AND COALESCE(idd.achievement,0)=0 AND (idd.remarks IS NULL OR idd.remarks='')
                 UNION
-                SELECT a.id
+                SELECT CAST(a.sequence AS CHAR(50)) AS id
                 FROM pm_actions a
                 LEFT JOIN pm_actions_indicator i ON i.actions_id = a.id AND a.service_id=${serviceId} AND a.year=${year}
                 WHERE (MONTHNAME(a.end)='${monthName}' AND i.closing_month IS NULL AND i.target>(SELECT SUM(achievement) FROM pm_actions_indicator_details
                 WHERE actions_id=a.id AND indicator_id=i.id))
-                UNION
-                SELECT id FROM pm_mcrs_log ml WHERE  ml.service_id=${serviceId} AND ml.year=${year} AND ml.month<${month} AND is_submitted<>TRUE
-                )tbl
+
         """
-        List<GroovyRowResult> lst = executeSelectSql(queryForList)
-        int count =(int) lst[0].c
-        boolean isSubmittable=true
-        if(count>0){
-            isSubmittable=false
+        List<String> lst = executeSelectSql(queryForList)
+        String strIds = EMPTY_SPACE
+        for (int i = 0; i < lst.size(); i++) {
+            strIds = strIds + lst.id[i]
+            if ((i + 1) < lst.size()) strIds = strIds + COMA
         }
-        return isSubmittable
+        return strIds
     }
     public boolean isDashboardSubmittable(long serviceId,int month,long year) {
         String queryForList = """

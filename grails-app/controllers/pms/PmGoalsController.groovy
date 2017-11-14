@@ -9,6 +9,7 @@ import com.pms.SecUser
 import grails.converters.JSON
 import groovy.sql.GroovyRowResult
 import service.PmGoalsService
+import service.PmServiceSectorService
 
 class PmGoalsController  extends BaseController {
 
@@ -23,6 +24,7 @@ class PmGoalsController  extends BaseController {
     UpdatePmGoalsActionService updatePmGoalsActionService
     DeletePmGoalsActionService deletePmGoalsActionService
     ListPmGoalsActionService listPmGoalsActionService
+    PmServiceSectorService pmServiceSectorService
 
 
 
@@ -30,12 +32,17 @@ class PmGoalsController  extends BaseController {
         SecUser user = baseService.currentUserObject()
         boolean isAdmin = baseService.isUserSystemAdmin(user.id)
         boolean isSubmitted = true
+        boolean isConsiderAll=true
         if(!isAdmin){
             Calendar now = Calendar.getInstance();   // Gets the current date and time
             int year = now.get(Calendar.YEAR);
             isSubmitted = PmSpLog.findByServiceIdAndYear(user.serviceId, year).isSubmitted
+            isConsiderAll=false
         }
-        render(view: "/pmGoals/show", model: [serviceId:user.serviceId,isAdmin: isAdmin,isSubmitted:isSubmitted])
+
+        List<GroovyRowResult> lst = pmServiceSectorService.listServices(true,isConsiderAll)
+        lst.remove(0)
+        render(view: "/pmGoals/show", model: [dropDownVals:lst as JSON,serviceId:user.serviceId,isAdmin: isAdmin,isSubmitted:isSubmitted])
     }
     def create() {
         renderOutput(createPmGoalsActionService, params)

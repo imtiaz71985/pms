@@ -9,27 +9,47 @@
     <sec:access url="/pmGoals/delete">
         <li onclick="deleteService();" id="actionDelete"><i class="fa fa-trash-o"></i>Delete</li>
     </sec:access>
-    <li class="pull-right" onclick="showCalender();">
-        <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
-    </li>
+    <div class="pull-right">
+        <table>
+            <tr><td>
+                <input type="text" id="serviceIdGrid" name="serviceIdGrid" class="col-md-2 kendo-drop-down"
+                       onchange="onChangeService()"/>
+            </td><td>
+                <li class="pull-right" onclick="showCalender();">
+                    <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
+                </li>
+            </td></tr>
+        </table>
+    </div>
 </ul>
 </script>
 
 <script language="javascript">
-    var gridGoal, dataSource, goalModel,dropDownService, serviceId, isSubmit,calYear;
+    var gridGoal, dataSource, goalModel, dropDownService, serviceId, isSubmit, calYear;
 
     $(document).ready(function () {
         onLoadGoalPage();
         calYear = moment().format('YYYY');
         initGoalGrid();
         initObservable();
-        initialLoadGrid();
+        dropDownServiceIdGrid = initKendoDropdown($('#serviceIdGrid'), null, null, ${dropDownVals});
         $("#calYear").text(calYear);
+        dropDownServiceIdGrid.value(serviceId);
+        initialLoadGrid();
+
     });
 
     function onLoadGoalPage() {
         $("#rowGoals").hide();
         serviceId = ${serviceId};
+        $('#yearCal').kendoDatePicker({
+            format: "yyyy",
+            start: "decade",
+            depth: "decade",
+            change: initialLoadGrid
+        }).data("kendoDatePicker");
+        $('#yearCal').val(calYear);
+
         $('#year').kendoDatePicker({
             format: "yyyy",
             parseFormats: ["yyyy"],
@@ -38,8 +58,8 @@
         }).data("kendoDatePicker");
 
         initializeForm($("#goalForm"), onSubmitGoal);
-        defaultPageTile("Create Goal",null);
-        isSubmit=${isSubmitted};
+        defaultPageTile("Create Goal", null);
+        isSubmit =${isSubmitted};
     }
     function showCalender() {
         $("#myCalModal").modal('show');
@@ -129,6 +149,7 @@
         clearForm($("#goalForm"), $('#serviceId'));
         initObservable();
         dropDownService.value(serviceId);
+        $("#calYear").text(calYear);
         $('#create').html("<span class='k-icon k-i-plus'></span>Save");
     }
     function resetForm() {
@@ -137,11 +158,11 @@
         $('#rowGoals').hide();
     }
     function initialLoadGrid() {
-        var url = "${createLink(controller: 'pmGoals', action: 'list')}?year=" + calYear;
+        var url = "${createLink(controller: 'pmGoals', action: 'list')}?year=" + calYear + "&serviceId=" + serviceId;
         populateGridKendo(gridGoal, url);
         $.ajax({
             type: 'post',
-            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear,
+            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear+"&serviceId="+serviceId,
             success: function (data, textStatus) {
                 if (data) {
                     $("#actionCreate").hide();
@@ -176,14 +197,14 @@
                 data: "list", total: "count",
                 model: {
                     fields: {
-                        id: { type: "number" },
-                        version: { type: "number" },
-                        goal: { type: "string" },
-                        year: { type: "number" },
-                        serviceId: { type: "number" },
-                        service: { type: "string" },
-                        serShortName: { type: "string" },
-                        sequence: { type: "number" }
+                        id: {type: "number"},
+                        version: {type: "number"},
+                        goal: {type: "string"},
+                        year: {type: "number"},
+                        serviceId: {type: "number"},
+                        service: {type: "string"},
+                        serShortName: {type: "string"},
+                        sequence: {type: "number"}
                     }
                 },
                 parse: function (data) {
@@ -215,14 +236,21 @@
                 buttonCount: 4
             },
             columns: [
-            <g:if test="${isAdmin}">
-                {field: "serShortName", title: "Sector/CSU", width: 30, sortable: false, filterable: kendoCommonFilterable(97)},
-            </g:if>
-            <g:else>
+                <g:if test="${isAdmin}">
+                {
+                    field: "serShortName",
+                    title: "Sector/CSU",
+                    width: 30,
+                    sortable: false,
+                    filterable: kendoCommonFilterable(97)
+                },
+                </g:if>
+                <g:else>
                 {field: "serShortName", title: "Sector/CSU", width: 30, sortable: false, filterable: false},
-            </g:else>
-                {field: "sequence", title: "ID#", width: 20, sortable: false, filterable: false,
-                    attributes: {style: setAlignCenter()},headerAttributes: {style: setAlignCenter()}
+                </g:else>
+                {
+                    field: "sequence", title: "ID#", width: 20, sortable: false, filterable: false,
+                    attributes: {style: setAlignCenter()}, headerAttributes: {style: setAlignCenter()}
                 },
                 {field: "goal", title: "Goal Statement", width: 200, sortable: false, filterable: false},
                 {
@@ -261,7 +289,7 @@
                 url = "${createLink(controller: 'pmGoals', action:  'delete')}";
         confirmDelete(msg, url, gridGoal);
     }
-    function addService(){
+    function addService() {
         $("#rowGoals").show();
         $('#year').val(calYear);
         dropDownService.value(serviceId);
@@ -279,6 +307,10 @@
         goalModel.set('goal', goal);
         $('#year').val(goal.year);
         $('#create').html("<span class='k-icon k-i-plus'></span>Update");
+    }
+    function onChangeService() {
+        serviceId = dropDownServiceIdGrid.value();
+        initialLoadGrid();
     }
 
 </script>

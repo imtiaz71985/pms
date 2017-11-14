@@ -176,6 +176,11 @@
                                     <a href="#pmActions/show"><i class="fa fa-balance-scale"></i>&nbsp;Actions</a>
                                 </li>
                             </sec:access>
+                            <sec:access url="/pmActions/show">
+                                <li>
+                                    <a href="#pmActions/showRequestedAction"><i class="fa fa-newspaper-o"></i>&nbsp;Support Seekers</a>
+                                </li>
+                            </sec:access>
                             <sec:access url="/pmSpSummary/show">
                                 <li>
                                     <a href="#pmSpSummary/show"><i class="fa fa-newspaper-o"></i>&nbsp;SAP Summary</a>

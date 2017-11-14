@@ -9,15 +9,24 @@
     <sec:access url="/pmActions/delete">
         <li onclick="deleteService();" id="actionDelete"><i class="fa fa-trash-o"></i>Delete</li>
     </sec:access>
-    <li class="pull-right" onclick="showCalender();">
-        <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
-    </li>
+    <div class="pull-right">
+        <table>
+            <tr><td>
+                <input type="text" id="serviceIdGrid" name="serviceIdGrid" class="col-md-2 kendo-drop-down"
+                       onchange="onChangeService()"/>
+            </td><td>
+                <li class="pull-right" onclick="showCalender();">
+                    <i class="fa fa-calendar-check-o"></i><span id="calYear"></span>
+                </li>
+            </td></tr>
+        </table>
+    </div>
 </ul>
 </script>
 
 <script language="javascript">
     var gridActions, dataSource, dataSourceUnit, calYear, actionsModel, dropDownService, serviceId, dropDownGoals,
-            supportDepartment, sourceOfFund, dropDownEmployee, st, isSubmit, isAdmin;
+            supportDepartment, sourceOfFund, dropDownEmployee, st, isSubmit, isAdmin,dropDownServiceIdGrid;
     var map = {};
     var resultArray = {};
     var indCount = 1;
@@ -29,18 +38,20 @@
         onLoadActionPage();
         initActionsGrid();
         initObservable();
+        dropDownServiceIdGrid = initKendoDropdown($('#serviceIdGrid'), null, null, ${dropDownVals});
         $("#calYear").text(calYear);
+        dropDownServiceIdGrid.value(serviceId);
         $(document).on("input", ".amount", calculateTarget);
         initialLoadGrid();
     });
 
     function initialLoadGrid() {
-        var url = "${createLink(controller: 'pmActions', action: 'list')}?year=" + calYear;
+        var url = "${createLink(controller: 'pmActions', action: 'list')}?year=" + calYear+"&serviceId="+serviceId;
         populateGridKendo(gridActions, url);
         populateGoals();
-        jQuery.ajax({
+        /*jQuery.ajax({
             type: 'post',
-            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear,
+            url: "${createLink(controller:'pmSpLog', action: 'retrieveSapIsSubmitted')}?year=" + calYear+"&serviceId="+serviceId,
             success: function (data, textStatus) {
                 serviceId = ${serviceId};
                 if (data) {
@@ -59,7 +70,7 @@
             complete: function (XMLHttpRequest, textStatus) {
             },
             dataType: 'json'
-        });
+        });*/
 
     }
 
@@ -1066,6 +1077,9 @@
         kendo.bind($("#application_top_panel"), actionsModel);
     }
     //////////////////////////// END GRID INIT ////////////////////////////////////////////////////////
-
+    function onChangeService() {
+        serviceId = dropDownServiceIdGrid.value();
+        initialLoadGrid();
+    }
 </script>
 

@@ -34,15 +34,13 @@ class ListPmActionsActionService extends BaseService implements ActionServiceInt
             c.set(Calendar.DAY_OF_YEAR, c.getActualMaximum(Calendar.DAY_OF_YEAR));
             Date date2 = DateUtility.getSqlDate(c.getTime());
 
-            List<Long> lst = currentUserDepartmentList()
+
             boolean departmentalUser = isUserOnlyDepartmental()
             if(departmentalUser){
-                SecUser user = currentUserObject()
-                SpTimeSchedule schedule = SpTimeSchedule.findByIsActive(Boolean.TRUE)
-                PmSpLog spLog = PmSpLog.findByServiceIdAndYear(user.serviceId,Integer.parseInt(schedule.activeYear))
-                if(spLog.isEditable){
+                long serviceId=Long.parseLong(result.serviceId.toString())
+
                     Closure additionalParam = {
-                        'in'('serviceId', lst)
+                        'eq'('serviceId', serviceId)
                         'eq'('isEditable', true)
                         'between'("start", date1, date2)
                     }
@@ -50,11 +48,13 @@ class ListPmActionsActionService extends BaseService implements ActionServiceInt
                     result.put(LIST, resultMap.list)
                     result.put(COUNT, resultMap.count)
                     return result
-                }
+
             }
 
+            List<Long> lst = currentUserDepartmentList()
             Closure additionalParam = {
                 'in'('serviceId', lst)
+                'eq'('isEditable', true)
                 'between'("start", date1, date2)
             }
             Map resultMap = super.getSearchResult(result, ListPmActionsActionServiceModel.class,additionalParam)

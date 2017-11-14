@@ -21,6 +21,13 @@
                                     data_model_name="dropDownService">
                             </app:dropDownService>
                         </div>
+
+                            <label class="col-md-1 control-label label-required" style="text-align: right;"
+                                   for="year">Year:</label>
+                            <div class="col-md-2">
+                                <input type="text" id="year" name="year">
+                            </div>
+
                         <div class="col-md-2">
                             <button id="create" name="create" type="submit" data-role="button"
                                     class="k-button k-button-icontext"

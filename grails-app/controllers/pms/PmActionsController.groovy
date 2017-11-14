@@ -28,6 +28,7 @@ class PmActionsController extends BaseController {
     ListMRPActionService listMRPActionService
     ListEditableActionsActionService listEditableActionsActionService
     UpdateEditableActionsActionService updateEditableActionsActionService
+    ListPmRequestedActionsActionService listPmRequestedActionsActionService
 
     def show() {
         List<GroovyRowResult> lst = pmServiceSectorService.activeList()
@@ -37,12 +38,17 @@ class PmActionsController extends BaseController {
         SecUser user = baseService.currentUserObject()
         boolean isAdmin = baseService.isUserSystemAdmin(user.id)
         boolean isSubmitted = Boolean.FALSE
+        boolean isConsiderAll=true
         if(!isAdmin){
             Calendar now = Calendar.getInstance();   // Gets the current date and time
             int year = now.get(Calendar.YEAR);
             isSubmitted = PmSpLog.findByServiceIdAndYear(user.serviceId, year).isSubmitted
+            isConsiderAll=false
         }
-        render(view: "/pmActions/show", model: [lstService  : lst as JSON,
+        List<GroovyRowResult> lstServices = pmServiceSectorService.listServices(true,isConsiderAll)
+        lstServices.remove(0)
+        render(view: "/pmActions/show", model: [dropDownVals:lstServices as JSON,
+                                                lstService  : lst as JSON,
                                                 lstProject  : lstProject as JSON,
                                                 isAdmin     : isAdmin,
                                                 serviceId   : user.serviceId,
@@ -188,5 +194,19 @@ class PmActionsController extends BaseController {
         Map map = new LinkedHashMap()
         map.put('subDate', subDate)
         render map as JSON
+    }
+
+    ////////////Requested actions by others dept///////////////
+
+    def showRequestedAction() {
+        SecUser user = baseService.currentUserObject()
+         List<Long> lst=baseService.userDepartmentList(user.id)
+        boolean isMultiDept=false
+        if(lst.size()>1 || !baseService.isUserOnlyDepartmental())
+            isMultiDept=true
+        render(view: "/pmRequestedActions/show", model: [serviceId   : user.serviceId,isMultidept:isMultiDept])
+    }
+    def listRequestedActions(){
+        renderOutput(listPmRequestedActionsActionService, params)
     }
 }

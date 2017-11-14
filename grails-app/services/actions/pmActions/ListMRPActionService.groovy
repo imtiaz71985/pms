@@ -61,7 +61,7 @@ class ListMRPActionService extends BaseService implements ActionServiceIntf {
                 List lstVal = buildMissionList(serviceId)
                 result.put("mission", lstVal)
             }else if(type.equals("Goals")){
-                List<PmGoals> lstGoals = PmGoals.findAllByServiceId(serviceId)
+                List<PmGoals> lstGoals = PmGoals.findAllByServiceIdAndYear(serviceId,year)
                 result.put(LIST, lstGoals)
             }else if(type.equals("Actions")){
                 List<GroovyRowResult> lstAction = buildActionsList(serviceId,start,end,currentMonth)

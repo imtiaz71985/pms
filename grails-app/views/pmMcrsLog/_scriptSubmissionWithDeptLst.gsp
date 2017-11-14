@@ -9,11 +9,20 @@
 </ul>
 </script>
 <script language="javascript">
-    var gridMCRSSubmission,dropDownService, dataSource, serviceId;
+    var gridMCRSSubmission,dropDownService, dataSource, serviceId,currentYear;
 
     $(document).ready(function () {
         serviceId = ${serviceId};
         dropDownService.value(serviceId);
+        currentYear = moment().format('YYYY');
+        $('#year').kendoDatePicker({
+            format: "yyyy",
+            parseFormats: ["yyyy"],
+            depth: "decade",
+            start: "decade",
+            change: loadGridData
+        });
+        $('#year').val(currentYear);
         initMcrsLogGrid();
         loadGridData();
         initializeForm($("#detailsForm"), loadGridData);
@@ -24,10 +33,15 @@
             loadGridData();
         }
     }
-    function loadGridData(){
-        var serviceId = $("#serviceId").val();
-        var params = "?serviceId=" +serviceId;
-        var url ="${createLink(controller: 'pmMcrsLog', action: 'list')}" + params;
+    function loadGridData() {
+        if (currentYear == '') {
+            showError("Please select year");
+            return false;
+        }
+        serviceId = dropDownService.value();
+        currentYear=$('#year').val();
+        var params = "?serviceId=" + serviceId + "&year=" + currentYear;
+        var url = "${createLink(controller: 'pmMcrsLog', action: 'list')}" + params;
         populateGridKendo(gridMCRSSubmission, url);
         return false;
     }

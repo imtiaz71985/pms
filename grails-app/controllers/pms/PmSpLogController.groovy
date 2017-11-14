@@ -33,6 +33,7 @@ class PmSpLogController extends BaseController {
             render Boolean.FALSE
             return
         }
+        long serviceId=Long.parseLong(params.serviceId.toString())
         PmSpLog spLog = PmSpLog.findByServiceIdAndYear(user.serviceId, Integer.parseInt(params.year.toString()))
         render spLog.isSubmitted
     }

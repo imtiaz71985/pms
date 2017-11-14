@@ -1,5 +1,6 @@
 package actions.pmSpLog
 
+import com.pms.PmActions
 import com.pms.PmSpLog
 import com.pms.PmSpLogDetails
 import grails.transaction.Transactional
@@ -41,6 +42,11 @@ class SubmitPmSpLogActionService extends BaseService implements ActionServiceInt
             if(details){
                 details.submittedOn = spLog.submissionDate
                 details.save()
+            }
+           List<PmActions> lstPmActions=PmActions.findAllByServiceIdAndYearAndIsEditable(spLog.serviceId,spLog.year,true)
+            for(PmActions pmActions in lstPmActions){
+                pmActions.isEditable=Boolean.FALSE
+                pmActions.save()
             }
             return result
         } catch (Exception ex) {

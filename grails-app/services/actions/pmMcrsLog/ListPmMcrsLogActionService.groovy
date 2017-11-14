@@ -25,9 +25,10 @@ class ListPmMcrsLogActionService extends BaseService implements ActionServiceInt
         try {
             if (result.containsKey("serviceId") && result.containsKey("year")) {
                 long serviceId = Long.parseLong(result.serviceId.toString())
+                int year=Integer.parseInt(result.year.toString())
                 Closure param = {
                     'eq'('serviceId', serviceId)
-                    'like'('year', result.year.toString())
+                    'eq'('year', year)
                 }
                 Map resultMap = super.getSearchResult(result, ListPmMcrsLogActionServiceModel, param)
                 result.put(LIST, resultMap.list)

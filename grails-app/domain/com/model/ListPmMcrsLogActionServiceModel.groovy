@@ -18,7 +18,7 @@ class ListPmMcrsLogActionServiceModel {
 
     long id
     long version
-    String year
+    int year
     int month
     String monthStr
     long serviceId
