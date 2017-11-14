@@ -128,7 +128,7 @@
                             width: 30, sortable: false, filterable: false,
                             headerAttributes: {style: setAlignCenter()},
                             attributes: {style: setAlignCenter()},
-                            template: "#=isSubmitted?kendo.toString(kendo.parseDate(submissionDate, 'yyyy-MM-dd'), 'dd-MMMM-yyyy'):''#"
+                            template: "#=isSubmitted?submissionDate==null?'':kendo.toString(kendo.parseDate(submissionDate, 'yyyy-MM-dd'), 'dd-MMMM-yyyy'):''#"
                         },
                         {
                             field: "submissionDateDb", title: "ED's Dashboard",

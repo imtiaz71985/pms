@@ -36,7 +36,7 @@ class SubmitMRPActionService extends BaseService implements ActionServiceIntf {
             if(PmMcrsLog.countByServiceIdAndYearAndMonthLessThanAndIsSubmittedNotEqual(pmMcrsLog.serviceId,pmMcrsLog.year,pmMcrsLog.month,true)>0){
                 return super.setError(params, "Sorry! Please previous MRP submit first.")
             }
-            return super.setError(params, "Sorry")
+
             params.put(PM_MCRS_LOG, pmMcrsLog)
             return params
         } catch (Exception ex) {

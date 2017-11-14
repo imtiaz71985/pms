@@ -126,7 +126,7 @@ class ListMRPActionService extends BaseService implements ActionServiceIntf {
                 (SELECT GROUP_CONCAT(short_name SEPARATOR ', ') FROM pm_service_sector WHERE LOCATE(CONCAT(',',id,',') ,CONCAT(',',a.support_department,','))>0 ) supportDepartmentStr,
                 (SELECT GROUP_CONCAT(short_name SEPARATOR ', ') FROM pm_projects WHERE LOCATE(CONCAT(',',id,',') ,CONCAT(',',a.source_of_fund,', '))>0 ) sourceOfFundStr
 
-                FROM pm_actions a
+                FROM pm_actions a JOIN pm_sp_log sl ON a.service_id=sl.service_id AND sl.year=YEAR('${start}') AND sl.is_submitted=TRUE
                 LEFT JOIN pm_goals g ON g.id = a.goal_id
                 JOIN (SELECT * FROM pm_service_sector WHERE id = ${serviceId}) sc ON sc.id = a.service_id
                 LEFT JOIN pm_actions_extend_history aeh ON aeh.actions_id=a.id

@@ -89,8 +89,8 @@
             data: jQuery("#goalForm").serialize(),
             url: actionUrl,
             success: function (data, textStatus) {
-                executePostCondition(data);
                 setButtonDisabled($('#create'), false);
+                executePostCondition(data);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
             },
