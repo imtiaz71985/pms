@@ -40,15 +40,22 @@
                         <a href="#"><i class="fa fa-file-pdf-o"></i>&nbsp;Reports<span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <sec:ifAnyUrls urls="/reports/showYearlySP,/reports/showYearlySPDetails">
+                            <sec:ifAnyUrls urls="/reports/showGoals,/reports/showYearlySP,/reports/showYearlySPDetails">
                                 <li>
                                     <a href="#"><i class="fa fa-cubes"></i>&nbsp;Annual SAP<span
                                             class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
+                                        <sec:access url="/reports/showGoals">
+                                            <li>
+                                                <a href="#reports/showGoals"><i
+                                                        class="fa fa-eye"></i>&nbsp;Goals
+                                                </a>
+                                            </li>
+                                        </sec:access>
                                         <sec:access url="/reports/showYearlySP">
                                             <li>
                                                 <a href="#reports/showYearlySP"><i
-                                                        class="fa fa-file-text-o"></i>&nbsp;Cumulative
+                                                        class="fa fa-bullseye"></i>&nbsp;Cumulative
                                                 </a>
                                             </li>
                                         </sec:access>
@@ -64,7 +71,7 @@
                             </sec:ifAnyUrls>
                             <sec:ifAnyUrls urls="/reports/showSapBackupView">
                                 <li>
-                                    <a href="#"><i class="fa fa-cubes"></i>&nbsp;Backup Files<span
+                                    <a href="#"><i class="fa fa-binoculars"></i>&nbsp;Backup Files<span
                                             class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <sec:access url="/reports/showSapBackupView">

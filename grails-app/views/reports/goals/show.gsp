@@ -3,20 +3,11 @@
         <div id="application_top_panel" class="panel panel-primary">
             <div class="panel-heading" style="height: 30px;">
                 <div class="panel-title">
-                    Annual SAP
-                    <button id="downloadSP" name="downloadSP" type="button" data-role="button"
-                            class="k-button k-button-icontext pull-right" role="button"
-                            aria-disabled="false" onclick='downloadYearlySpReport();'><span
-                            class="fa fa-file-pdf-o"></span>&nbsp;Download
-                    </button>
-                    <label class="control-label label-optional pull-right" style="font-size: 10px;">
-                        <input type="radio" name="downloadType" value="true" checked> All column
-                        <input type="radio" name="downloadType" value="false">Selected column
-                    &nbsp;</label>
+                    CSU/Sector wise Goals
                 </div>
             </div>
 
-            <g:form name='detailsForm' id='detailsForm' class="form-horizontal form-widgets" role="form">
+            <g:form name='goalsForm' id='goalsForm' class="form-horizontal form-widgets" role="form">
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="col-md-1 control-label label-optional" for="year">Year:</label>
@@ -33,17 +24,13 @@
                             <app:dropDownService
                                     class="kendo-drop-down" is_in_sp="true"
                                     id="serviceId" name="serviceId" tabindex="2"
-                                    consider_all="true"
                                     data_model_name="dropDownService">
                             </app:dropDownService>
                         </div>
                         <div class="col-md-2">
-                            <select class="kendo-drop-down" id="indicatorType" name="indicatorType" tabindex="3"></select>
-                        </div>
-                        <div class="col-md-2">
                             <button id="create" name="create" type="submit" data-role="button"
                                     class="k-button k-button-icontext"
-                                    role="button" tabindex="4"
+                                    role="button" tabindex="3"
                                     aria-disabled="false"><span class="k-icon k-i-search"></span>View Result
                             </button>
                         </div>
@@ -53,7 +40,13 @@
             </g:form>
         </div>
     </div>
+
     <div class="row">
-        <div id="gridYearlySP"></div>
+        <div id="gridGoals"></div>
     </div>
 </div>
+<g:render template='/reports/goals/scripts'/>
+
+
+
+

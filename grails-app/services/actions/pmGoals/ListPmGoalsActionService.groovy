@@ -18,8 +18,19 @@ class ListPmGoalsActionService extends BaseService implements ActionServiceIntf 
     @Transactional(readOnly = true)
     public Map execute(Map result) {
         try {
-            boolean departmentalUser = isUserOnlyDepartmental()
             int year = Integer.parseInt(result.year.toString())
+            if(result.containsKey("reportsView")){
+                long serviceId=Long.parseLong(result.serviceId.toString())
+                Closure additionalParam = {
+                    'eq'('serviceId', serviceId)
+                    'eq'('year', year)
+                }
+                Map resultMap = super.getSearchResult(result, ListPmGoalsActionServiceModel.class,additionalParam)
+                result.put(LIST, resultMap.list)
+                result.put(COUNT, resultMap.count)
+                return result
+            }
+            boolean departmentalUser = isUserOnlyDepartmental()
 
             if(departmentalUser){
                 long serviceId=Long.parseLong(result.serviceId.toString())

@@ -23,7 +23,7 @@
                                    placeholder="Year" validationMessage="Required"/>
                         </div>
                         <label class="col-md-1 control-label label-optional"
-                               for="serviceId">Service:</label>
+                               for="serviceId">Sector/CSU:</label>
 
                         <div class="col-md-3">
                             <app:dropDownService

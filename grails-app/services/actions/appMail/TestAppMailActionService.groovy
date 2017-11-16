@@ -51,7 +51,7 @@ class TestAppMailActionService extends BaseService implements ActionServiceIntf 
                         for (String recipient : recipientList) {
                             mailService.sendMail {
                                 to "${recipient}"
-                                from "sp.notification@friendship-bd.org"
+                                from "sap.notification@friendship.ngo"
                                 subject "${subjectStr}"
                                 html(mailBody)
                             }

@@ -115,7 +115,7 @@ class DynamicSpMailSendJob {
             public void run() {
                 mailService.sendMail {
                     to "${email}"
-                    from "sp.notification@friendship-bd.org"
+                    from "sap.notification@friendship.ngo"
                     subject "${subjectStr}"
                     html(mailBody)
                 }

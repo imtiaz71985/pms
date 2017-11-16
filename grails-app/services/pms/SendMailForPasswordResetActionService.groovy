@@ -134,16 +134,16 @@ class SendMailForPasswordResetActionService extends BaseService implements Actio
     private String sendMail(SecUser user, String email) {
         String link = grailsLinkGenerator.link(controller: "login", action: SHOW_RESET_PASSWORD, absolute: true, params: [link: user.passwordResetLink])
         String name = user.employeeName
-        String employeeId = user.employeeId
         String loginId = user.username
         String securityCode = user.passwordResetCode
+//        email = email.replace('@friendship-bd.org','@friendship.ngo');
+        println('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ' + email)
 
         String body = """
         <div>
             <p>
                 Dear ${name}, <br/>
-                Your Login ID    : ${loginId} <br/>
-                Your Employee ID : ${employeeId}
+                Your Login ID : ${loginId} <br/>
             </p>
             <p>
                 To reset your password please click the link below (or copy/paste into your web browser):<br/>
@@ -167,7 +167,7 @@ class SendMailForPasswordResetActionService extends BaseService implements Actio
             public void run() {
                 mailService.sendMail {
                     to "${email}"
-                    from "support.mis@friendship-bd.org"
+                    from "sap.notification@friendship.ngo"
                     subject "Password reset link"
                     html (body)
                 }

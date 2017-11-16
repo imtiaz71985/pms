@@ -1,5 +1,6 @@
 package pms
 
+import actions.pmGoals.ListPmGoalsActionService
 import actions.reports.dashboard.DownloadEdDashBoardActionService
 import actions.reports.dashboard.ListEdDashBoardActionService
 import actions.reports.mcrs.DownloadMCRSActionService
@@ -33,6 +34,8 @@ class ReportsController  extends BaseController  {
     MeetingLogService meetingLogService
     PmSpLogService pmSpLogService
 
+    ListPmGoalsActionService listPmGoalsActionService
+
     ListMCRSActionService listMCRSActionService
     DownloadMCRSActionService downloadMCRSActionService
 
@@ -52,6 +55,18 @@ class ReportsController  extends BaseController  {
     static allowedMethods = [
             showSpStatus: "POST", showMcrsStatus: "POST", showMcrs: "POST", showSpMonthlyPlan: "POST", showYearlySP: "POST"
     ]
+    //################## Goals Start ###########################
+
+    def showGoals() {
+        SecUser user = baseService.currentUserObject()
+        render(view: "/reports/goals/show", model: [serviceId:user.serviceId])
+    }
+    def listGoals() {
+        renderOutput(listPmGoalsActionService, params)
+    }
+
+    //################## Goals End ###########################
+
     //################## Statical Status Start ###########################
 
     def showSpStatus() {
